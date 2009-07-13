@@ -1,9 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 require File.dirname(__FILE__) + '/fixtures/classes'
- require File.expand_path(File.dirname(__FILE__) + "/../never_block/io/neverblock_io")
- require File.expand_path(File.dirname(__FILE__) + "/../never_block/socket/socket_neverblock")
- require File.expand_path(File.dirname(__FILE__) + "/../neverblock")
-
+require File.expand_path(File.dirname(__FILE__) + "/../../neverblock")
+NB::Fiber.new do
 describe "IO#sysread on a file" do
   before :each do
     @file_name = tmp("IO_sysread_file") + $$.to_s
@@ -92,3 +90,4 @@ describe "IO#sysread on a file" do
     lambda { IOSpecs.closed_file.sysread(5) }.should raise_error(IOError)
   end
 end
+end.resume

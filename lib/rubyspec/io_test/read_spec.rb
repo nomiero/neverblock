@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../spec_helper'
 require File.dirname(__FILE__) + '/fixtures/classes'
-require File.expand_path(File.dirname(__FILE__) + "/../../neverblock")
+require File.expand_path(File.dirname(__FILE__) + "/../../io")
 
 NB::Fiber.new do
   describe "IO.read" do

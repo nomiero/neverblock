@@ -1,9 +1,9 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/../spec_helper'
 require File.dirname(__FILE__) + '/fixtures/classes'
-require File.expand_path(File.dirname(__FILE__) + "/../neverblock")
+#require File.expand_path(File.dirname(__FILE__) + "/../neverblock")
 
-NB::Fiber.new do
+#NB::Fiber.new do
   describe "IO.read" do
     before :each do
       @fname = "test.txt"
@@ -285,8 +285,8 @@ NB::Fiber.new do
     end
 
   end
-      NB.reactor.add_timer(1){NB.reactor.stop}
-    NB.reactor.run
+ #     NB.reactor.add_timer(1){NB.reactor.stop}
+ #   NB.reactor.run
 
-end.resume
+#end.resume
 
