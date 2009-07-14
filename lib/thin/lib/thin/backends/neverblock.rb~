@@ -1,4 +1,4 @@
-require 'neverblock'
+require File.expand_path(File.dirname(__FILE__)+'/../neverblock')
 
 # methods to implement
 =begin
@@ -23,30 +23,36 @@ module Thin
       def initialize(host, port, options={})
         @host    = host
         @port    = port.to_i
-        @timeout = 30       
+        @timeout = 30
+        Kernel.puts "inside neverblock backend"       
       end
           
       def start
+        @reactor = NB.reactor
         @server_socket = TCPServer.new(@host, @port)
         @server_socket.listen(511)
-        NB.reactor.attach(:read, @server_socket) do |server, reactor|
+        Kernel.puts "before anything"
+        @reactor.attach(:read, @server_socket) do |server, reactor|
           begin
             loop do
+              Kernel.puts "before accept_connection"
               connection = accept_connection
-            end
+            end@reactor
           rescue Errno::EWOULDBLOCK, Errno::EAGAIN, Errno::EINTR
           rescue Exception => e
-            STDERR.puts e
+            STDERR.puts e +"first exception"
           end
         end        
         loop do
           begin
-            Fiber.new do
+            NB::Fiber.new do
+               Kernel.puts "inside reactor fiber loop"
               @reactor.run
             end.resume
+           Kernel.puts "outside reactor fiber loop"
             break unless @reactor.running?
           rescue Exception => e
-            puts e
+            puts e +"second exception"
             puts e.backtrace
             p @reactor
           end
@@ -64,14 +70,16 @@ module Thin
       
       def maxfds;raise "not implemented";end
       
-      def to_s;"#{@host}:#{@port} (Reactor)";end
+      def to_s;"#{@host}:#{@port} (NeverBlock)";end
       
       def running?;@reactor.running?;end
       
       protected
         
         def accept_connection
+          Kernel.puts "before accept nonblock"
           socket = @server_socket.accept_nonblock
+          Kernel.puts "after accept nonblock"
           connection = ::Thin::ReactorConnection.new(socket, @reactor)
           connection.backend                 = self
           connection.app                     = @server.app

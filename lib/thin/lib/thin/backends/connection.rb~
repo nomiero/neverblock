@@ -1,4 +1,4 @@
-require 'neverblock/io'
+require File.expand_path(File.dirname(__FILE__)+'/../io')
  
 module Thin
   # Connection between the server and client.
@@ -46,6 +46,7 @@ module Thin
       @t = Time.now
       @request  = Request.new
       @response = Response.new
+      Kernel.puts "inside our backend"
     end
     
     def post_init
@@ -84,7 +85,7 @@ module Thin
       rescue Exception => e
         puts e
         close_connection
-        break
+        return 
       end
       @data = ''      
     end

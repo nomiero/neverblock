@@ -28,11 +28,12 @@ module Thin
           # we also need to handle timeouts for persistent connections
           begin
             loop do
-              conn = @server_socket.accept_nonblock
-              conn.gets("\r\n\r\n")
-              conn.write("HTTP/1.1 200 OK\r\n\r\nHi")
-              conn.close
-              #connection = accept_connection(server)
+#             conn = @server_socket.accept_nonblock
+#              conn.gets("\r\n\r\n")
+#            conn.write("HTTP/1.1 200 OK\r\n\r\nHi")
+#           conn.close
+              
+              connection = accept_connection(server)
             end
           rescue Errno::EWOULDBLOCK, Errno::EAGAIN, Errno::EINTR
           rescue Exception => e
