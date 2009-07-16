@@ -1,6 +1,0 @@
-$:.unshift File.expand_path(File.dirname(__FILE__))
-
-require '/../neverblock'
-#socket and file will require IO.rb in core
-require 'neverblock/core/socket'
-require 'neverblock/core/file'
